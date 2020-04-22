@@ -1,2 +1,1 @@
-# UnrealCourseBullsAndCows
-Bulls and cows game for unreal course
+# 03_BullCowGame
