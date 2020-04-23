@@ -9,7 +9,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     SetupGame();
 
     //PrintLine(FString::Printf(TEXT("The Hidden Word is: %s"), *HiddenWord)); // Debug line we can turn it off/on as we need
-    PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf
+    //PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf
         
 }
 
@@ -26,7 +26,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     else
     {
         PrintLine(TEXT("Your guess is %s"), *Input);
-
+        
         // Do we need to surround this on a loop? or global variables will be enough?
         // Checking Player Guess
         if (Input == this->HiddenWord)
@@ -36,30 +36,38 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
         }
         else
         {
-            // TODO: Validation    
-            // TODO: Check if isogram
-            // bool bIsIsogram = this->IsIsogram(Input);
-            // check if correct number of characters
-            bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Input);
+            // Subtract life
+            --UserLives;
 
-            if (!bHasCorrectNumberOfChars)
+            // If the user run out of lives then print a message telling the input was not correct and break the loop
+            // Ask if the user wants to play again
+            // if don't then exit the game
+            // else start again
+            if (UserLives > 0)
             {
-                PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
+                // TODO: Validation    
+                // TODO: Check if isogram
+                // bool bIsIsogram = this->IsIsogram(Input);
+
+                // check if correct number of characters
+                bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Input);
+                
+                if (!bHasCorrectNumberOfChars)
+                {
+                    PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
+                }
+                else
+                {  
+                    // else Sorry but your guess was not correct, please try again
+                    PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
+                }
+                PrintLine(TEXT("You have %i lives remain!"), UserLives);
             }
             else
             {
-                // TODO: Subtract life
-                // this->UserLifes--;
-                // If the user run out of lives then print a message telling the input was not correct and break the loop
-                // Ask if the user wants to play again
-                // if don't then exit the game
-                // else start again
-
-                // else Sorry but your guess was not correct, please try again
-                PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
-            }
-             
-            EndGame();
+                PrintLine(TEXT("Sorry but you lose, you don't have any lives left!"));
+                EndGame();
+            } 
         }
     }       
 }
@@ -70,7 +78,7 @@ void UBullCowCartridge::SetupGame()
     this->HiddenWord = TEXT("bird"); // Unreal can encode the string correctly;
 
     // Set lives
-    this->UserLives = 4;
+    this->UserLives = HiddenWord.Len();
     bGameOver = false;
 
     WelcomePlayer();
@@ -83,7 +91,7 @@ bool UBullCowCartridge::CheckWordLength(const FString HiddenWord, FString Input)
 
 void UBullCowCartridge::EndGame()
 {
-    bGameOver = true;
+    bGameOver = true;    
     PrintLine(TEXT("Press enter to play again\nOtherwise please hit Esc"));
 }
 
@@ -92,6 +100,7 @@ void UBullCowCartridge::WelcomePlayer()
     // TEXT macro to encode unreal string
     PrintLine(TEXT("Welcome to Bulls Cows Game!"));
     // Ask the user to input the guess
-    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); // TODO: Change it for a not hardcoded variable
+    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); // TODO: Change it for a not hardcoded variable   
+    PrintLine(TEXT("You have %i lives!"), UserLives); // TODO: Change it for a not hardcoded variable   
     PrintLine(TEXT("Press enter to continue..."));
 }
