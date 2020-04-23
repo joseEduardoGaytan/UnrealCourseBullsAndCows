@@ -4,11 +4,15 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
+
+    // Welcoming the Player
     // TEXT macro to encode unreal string
     PrintLine(TEXT("Welcome to Bulls Cows Game!"));
     // Ask the user to input the guess
     PrintLine(TEXT("Guess the 4 letter word!")); // TODO: Change it for a not hardcoded variable
     PrintLine(TEXT("Press enter to continue..."));
+
+    // Seting Up Game
     // Set the hidden word
     this->HiddenWord = TEXT("bird"); // Unreal can encode the string correctly;
 
@@ -20,9 +24,14 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     ClearScreen();
     PrintLine(Input);
 
+    // TODO: Validation    
     // TODO: Check if isogram
-    // CTODO:heck if correct number of characters
+    // bool bIsIsogram = this->IsIsogram(Input);
+    // TODO: check if correct number of characters
+    // bool bHasCorrectNumberOfChars = this->CheckNumberOfChars(this->HiddenWord, Input);
 
+    // Do we need to surround this on a loop? or global variables will be enough?
+    // Checking Player Guess
     if (Input == this->HiddenWord) 
     {
         PrintLine(TEXT("Congratulations you win!"));
@@ -30,12 +39,16 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     else 
     {
         // TODO: Subtract life
+        // this->UserLifes--;
         // If the user run out of lives then print a message telling the input was not correct and break the loop
+        // Ask if the user wants to play again
+        // if don't then exit the game
+        // else start again
 
         // else Sorry but your guess was not correct, please try again
         PrintLine(TEXT("Sorry but your guess is not correct, you lose!"));
     }
-
+        
     //while (false) 
     //{
     //    FString HiddenWord = TEXT("bird"); // Unreal can encode the string correctly
