@@ -18,6 +18,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual bool CheckWordLength(const FString HiddenWord, FString Input);
 	virtual void WelcomePlayer();
 	virtual void EndGame();
+	virtual void ProcessGuess(FString Guess);
 
 	// Your declarations go below!
 	private:

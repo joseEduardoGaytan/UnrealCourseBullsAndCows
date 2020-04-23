@@ -27,48 +27,9 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     {
         PrintLine(TEXT("Your guess is %s"), *Input);
         
-        // Do we need to surround this on a loop? or global variables will be enough?
-        // Checking Player Guess
-        if (Input == this->HiddenWord)
-        {
-            PrintLine(TEXT("Congratulations you win!"));   
-            EndGame();
-        }
-        else
-        {
-            // Subtract life
-            --UserLives;
-
-            // If the user run out of lives then print a message telling the input was not correct and break the loop
-            // Ask if the user wants to play again
-            // if don't then exit the game
-            // else start again
-            if (UserLives > 0)
-            {
-                // TODO: Validation    
-                // TODO: Check if isogram
-                // bool bIsIsogram = this->IsIsogram(Input);
-
-                // check if correct number of characters
-                bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Input);
-                
-                if (!bHasCorrectNumberOfChars)
-                {
-                    PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
-                }
-                else
-                {  
-                    // else Sorry but your guess was not correct, please try again
-                    PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
-                }
-                PrintLine(TEXT("You have %i lives remain!"), UserLives);
-            }
-            else
-            {
-                PrintLine(TEXT("Sorry but you lose, you don't have any lives left!"));
-                EndGame();
-            } 
-        }
+        // Process all the game rules when the guess fails
+        ProcessGuess(Input);
+        
     }       
 }
 
@@ -103,4 +64,51 @@ void UBullCowCartridge::WelcomePlayer()
     PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); // TODO: Change it for a not hardcoded variable   
     PrintLine(TEXT("You have %i lives!"), UserLives); // TODO: Change it for a not hardcoded variable   
     PrintLine(TEXT("Press enter to continue..."));
+}
+
+void UBullCowCartridge::ProcessGuess(FString Guess)
+{
+    // Do we need to surround this on a loop? or global variables will be enough?
+    // We don't need to use an iterator, since the OnInput is in charge to handle all the process
+    // Checking Player Guess
+    if (Guess == this->HiddenWord)
+    {
+        PrintLine(TEXT("Congratulations you win!"));
+        EndGame();
+    }
+    else
+    {
+        // Subtract life
+        --UserLives;
+
+        // If the user run out of lives then print a message telling the input was not correct and break the loop
+        // Ask if the user wants to play again
+        // if don't then exit the game
+        // else start again
+        if (UserLives > 0)
+        {
+            // TODO: Validation    
+            // TODO: Check if isogram
+            // bool bIsIsogram = this->IsIsogram(Input);
+
+            // check if correct number of characters
+            bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Guess);
+
+            if (!bHasCorrectNumberOfChars)
+            {
+                PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
+            }
+            else
+            {
+                // else Sorry but your guess was not correct, please try again
+                PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
+            }
+            PrintLine(TEXT("You have %i lives remain!"), UserLives);
+        }
+        else
+        {
+            PrintLine(TEXT("Sorry but you lose, you don't have any lives left!"));
+            EndGame();
+        }
+    }
 }
