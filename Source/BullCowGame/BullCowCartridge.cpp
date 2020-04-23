@@ -53,7 +53,8 @@ bool UBullCowCartridge::CheckWordLength(const FString HiddenWord, FString Input)
 void UBullCowCartridge::EndGame()
 {
     bGameOver = true;    
-    PrintLine(TEXT("Press enter to play again\nOtherwise please hit Esc"));
+    PrintLine(TEXT("The hidden word was %s"), *HiddenWord);
+    PrintLine(TEXT("\nPress enter to play again\nOtherwise please hit Esc"));
 }
 
 void UBullCowCartridge::WelcomePlayer()
@@ -67,48 +68,48 @@ void UBullCowCartridge::WelcomePlayer()
 }
 
 void UBullCowCartridge::ProcessGuess(FString Guess)
-{
-    // Do we need to surround this on a loop? or global variables will be enough?
-    // We don't need to use an iterator, since the OnInput is in charge to handle all the process
+{    
+    // Using early returns; not needed but is part of a challenge
     // Checking Player Guess
     if (Guess == this->HiddenWord)
     {
         PrintLine(TEXT("Congratulations you win!"));
         EndGame();
+        return;
     }
-    else
+
+    // Validation stuff
+
+    // 1. Check if correct number of characters
+    bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Guess);
+
+    if (!bHasCorrectNumberOfChars)
     {
-        // Subtract life
-        --UserLives;
-
-        // If the user run out of lives then print a message telling the input was not correct and break the loop
-        // Ask if the user wants to play again
-        // if don't then exit the game
-        // else start again
-        if (UserLives > 0)
-        {
-            // TODO: Validation    
-            // TODO: Check if isogram
-            // bool bIsIsogram = this->IsIsogram(Input);
-
-            // check if correct number of characters
-            bool bHasCorrectNumberOfChars = this->CheckWordLength(this->HiddenWord, Guess);
-
-            if (!bHasCorrectNumberOfChars)
-            {
-                PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
-            }
-            else
-            {
-                // else Sorry but your guess was not correct, please try again
-                PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
-            }
-            PrintLine(TEXT("You have %i lives remain!"), UserLives);
-        }
-        else
-        {
-            PrintLine(TEXT("Sorry but you lose, you don't have any lives left!"));
-            EndGame();
-        }
+        PrintLine(TEXT("Sorry but the Hidden Word is %i characters long, try again!"), HiddenWord.Len());
+        PrintLine(TEXT("You still have %i lives remain!"), UserLives);
+        return;
     }
+
+    // TODO:2. Check if isogram
+    // bool bIsIsogram = this->IsIsogram(Input);
+    // Check if not Isogram
+
+    // If the Player doesn't hit the Hidden word then the user lose a life
+    // Subtract life
+    --UserLives;
+
+    // If the user has no any lives left then the user lose
+    if (UserLives <= 0) 
+    {
+        PrintLine(TEXT("Sorry but you lose, you don't have any lives left!"));
+        EndGame();
+        return;
+    }
+
+    // Show the player the Bulls and Cows
+
+    // Print the additional or lives regarding information to the user
+    PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
+    PrintLine(TEXT("You have %i lives remain!"), UserLives);
+
 }
