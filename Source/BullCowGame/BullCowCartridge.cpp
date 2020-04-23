@@ -25,6 +25,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     // else check the Player Guess
     else
     {
+        // TEXT macro ensure cross platform compatibility in Unreal
         PrintLine(TEXT("Your guess is %s"), *Input);
         
         // Process all the game rules when the guess fails
@@ -70,6 +71,8 @@ void UBullCowCartridge::WelcomePlayer()
 void UBullCowCartridge::ProcessGuess(FString Guess)
 {    
     // Using early returns; not needed but is part of a challenge
+    // We can avoid nesting
+
     // Checking Player Guess
     if (Guess == this->HiddenWord)
     {
