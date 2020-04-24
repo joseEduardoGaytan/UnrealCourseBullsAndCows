@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include <algorithm>
+#include <unordered_set>
 
 void UBullCowCartridge::BeginPlay() // When the game starts
-{
+{    
     Super::BeginPlay();
 
     // Seting Up Game
@@ -93,10 +95,16 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
         return;
     }
 
-    // TODO:2. Check if isogram
-    // bool bIsIsogram = this->IsIsogram(Input);
-    // Check if not Isogram
-
+    // 2. Check if isogram
+    bool bIsIsogram = this->IsIsogram(Guess);
+    
+    if (!bIsIsogram) 
+    {
+        PrintLine(TEXT("Sorry but no repeating letters, please try again!"));
+        PrintLine(TEXT("You still have %i lives remain!"), UserLives);
+        return;
+    }
+                
     // If the Player doesn't hit the Hidden word then the user lose a life
     // Subtract life
     --UserLives;
@@ -115,4 +123,28 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
     PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
     PrintLine(TEXT("You have %i lives remain!"), UserLives);
 
+}
+
+bool UBullCowCartridge::IsIsogram(FString Guess) const
+{
+    // Since a set doesn't allow any repeated values
+    std::unordered_set<char> Chars;
+
+    // we evaluate that all conditions are met for the predicate
+    // if the word is not an isogram then it will fail in the attempt to insert in the set
+    bool bIsIsogram = std::all_of(
+        Guess.begin(),
+        Guess.end(),
+        // since we can't use an unary predicate with two parameters we use
+        // Lambda expression to use a two parameters predicate        
+        [&Chars](const char GuessChar)
+        {         
+            // Check for duplicate in the unordered set
+            // we call second and if is a duplicate it will return false
+            // this will invalidate the all_of method
+            return Chars.insert(GuessChar).second;            
+        }
+    );
+            
+    return bIsIsogram;
 }

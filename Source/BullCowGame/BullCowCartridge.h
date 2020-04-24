@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <unordered_set>
 #include "CoreMinimal.h"
 #include "Console/Cartridge.h"
 #include "BullCowCartridge.generated.h"
@@ -19,11 +20,11 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual void WelcomePlayer();
 	virtual void EndGame();
 	virtual void ProcessGuess(FString Guess);
-
+	virtual bool IsIsogram(FString Guess) const;
+		
 	// Your declarations go below!
 	private:
 	FString HiddenWord;
 	int32 UserLives;
-	bool bGameOver;
-	
+	bool bGameOver;	
 };
