@@ -148,3 +148,25 @@ bool UBullCowCartridge::IsIsogram(FString Guess) const
             
     return bIsIsogram;
 }
+
+bool UBullCowCartridge::IsIsogramCourseVersion(FString Guess) const
+{
+    //int32 Index = 0;
+    //int32 Comparison = Index + 1;
+
+    for (int32 Index = 0; Index < Guess.Len() - 1; Index++)
+    {
+        char characterTaken = Guess[Index];
+        for (int32 Comparison = Index + 1; Comparison < Guess.Len(); Comparison++)
+        {
+            if (characterTaken == Guess[Comparison])
+            {
+                return false;
+            }
+        }
+    }
+
+    
+
+    return true;
+}
