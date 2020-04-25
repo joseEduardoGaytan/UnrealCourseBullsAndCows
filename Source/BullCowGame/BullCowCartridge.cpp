@@ -2,6 +2,8 @@
 #include "BullCowCartridge.h"
 #include <algorithm>
 #include <unordered_set>
+#include "HiddenWordList.h"
+
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {    
