@@ -173,14 +173,13 @@ bool UBullCowCartridge::IsIsogramCourseVersion(FString Guess) const
     return true;
 }
 
-/// Is const because is not going to change the state of the class
+/// Is const because is not going to change the state of the class. Any member variables
 TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
 {
     TArray<FString> ValidWords;
 
-    for (int32 Index = 0; Index < WordList.Num(); Index++)
-    {
-        FString hiddenWord = WordList[Index];
+    for (FString hiddenWord : WordList)
+    {        
         int32 wordLength = hiddenWord.Len();
         if (wordLength >= 4 && wordLength <= 8)
         {
