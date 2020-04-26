@@ -6,15 +6,17 @@
 
 
 void UBullCowCartridge::BeginPlay() // When the game starts
-{    
+{
     Super::BeginPlay();
+
+    TArray<FString> ValidWords = GetValidWords(Words);
 
     // Seting Up Game
     SetupGame();
 
     //PrintLine(FString::Printf(TEXT("The Hidden Word is: %s"), *HiddenWord)); // Debug line we can turn it off/on as we need
-    //PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf
-        
+    //PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf    
+    PrintLine(TEXT("Valid Words count: %i"), ValidWords.Num());
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -166,9 +168,36 @@ bool UBullCowCartridge::IsIsogramCourseVersion(FString Guess) const
                 return false;
             }
         }
-    }
-
-    
+    }    
 
     return true;
+}
+
+/// Is const because is not going to change the state of the class
+TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+{
+    TArray<FString> ValidWords;
+
+    for (int32 Index = 0; Index < WordList.Num(); Index++)
+    {
+        FString hiddenWord = WordList[Index];
+        int32 wordLength = hiddenWord.Len();
+        if (wordLength >= 4 && wordLength <= 8)
+        {
+            bool bIsIsogram = IsIsogram(hiddenWord);
+            if (bIsIsogram)
+            {
+                // Add element to the TArray, Emplace is recommended for this
+                ValidWords.Emplace(hiddenWord);
+            }
+        }
+    }
+
+    /*for (int32 Index = 0; Index < ValidWords.Num(); Index++)
+    {
+        PrintLine(TEXT("%s."), *ValidWords[Index]);
+    }*/
+
+    return ValidWords;
+
 }

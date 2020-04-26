@@ -22,6 +22,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual void ProcessGuess(FString Guess);
 	virtual bool IsIsogram(FString Guess) const;
 	virtual bool IsIsogramCourseVersion(FString Guess) const;
+	virtual TArray<FString> GetValidWords(TArray<FString> WordsList) const; // is not going to change any private value this is why is const
 		
 	// Your declarations go below!
 	private:
