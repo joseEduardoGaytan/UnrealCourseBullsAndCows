@@ -8,7 +8,7 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-
+        
     //// Referencia
     //int32 a = 0;
     //int32 b = 5;
@@ -17,15 +17,12 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     //PrintLine(TEXT("a = %i; b = %i; c = %i"), a,b,refa);
     //refa = b; // This is going to change a because refa is a reference to a
     //PrintLine(TEXT("a = %i; b = %i; c = %i"), a, b, refa);
-
-    TArray<FString> ValidWords = GetValidWords(Words);
-
+        
     // Seting Up Game
     SetupGame();
 
-    PrintLine(FString::Printf(TEXT("The Hidden Word is: %s"), *HiddenWord)); // Debug line we can turn it off/on as we need
-    //PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf    
-    PrintLine(TEXT("Valid Words count: %i"), ValidWords.Num());
+    //PrintLine(TEXT("The Hidden Word is: %s"), *HiddenWord); // Debug line we can turn it off/on as we need
+    //PrintLine(TEXT("The Hidden Word is: %s.\nIt is %i characters long"), *HiddenWord, HiddenWord.Len()); // Debug line we can turn it off/on as we need -- no need of Printf        
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
@@ -52,13 +49,18 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
 void UBullCowCartridge::SetupGame()
 {
     // Set the hidden word
-    this->HiddenWord = TEXT("bird"); // Unreal can encode the string correctly;
+    // Get a random word from Valid words
+    TArray<FString> ValidWords = GetValidWords(Words);
+    int32 RandomIndex = FMath::RandRange(0, ValidWords.Num() - 1);
+    this->HiddenWord = ValidWords[RandomIndex]; // Unreal can encode the string correctly;
 
     // Set lives
-    this->UserLives = HiddenWord.Len();
+    this->UserLives = HiddenWord.Len() * 2;
     bGameOver = false;
 
     WelcomePlayer();
+
+    PrintLine(TEXT("The Hidden Word is: %s"), *HiddenWord); // Debug line we can turn it off/on as we need
 }
 
 bool UBullCowCartridge::CheckWordLength(const FString HiddenWord, FString Input)
@@ -131,9 +133,13 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
 
     // Show the player the Bulls and Cows
+    // are not initialized this means are out parameters
+    int32 Bulls, Cows;
+    this->GetBullCows(Guess, Bulls, Cows);
 
     // Print the additional or lives regarding information to the user
     PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
+    PrintLine(TEXT("You have %i Bulls and %i Cows"), Bulls, Cows);
     PrintLine(TEXT("You have %i lives remain!"), UserLives);
 
 }
@@ -204,5 +210,34 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     }*/
 
     return ValidWords;
+
+}
+
+void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const
+{
+    // initialize out parameter, because this are not initialized outside the function
+    BullCount = 0;
+    CowCount = 0;
+
+    for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
+    {
+        char GuessChar = Guess[GuessIndex];
+        if (GuessChar == this->HiddenWord[GuessIndex])
+        {
+            BullCount++;
+            continue; // next iteration
+        }
+
+        for (int32 HiddenWordIndex = 0; HiddenWordIndex < HiddenWord.Len(); HiddenWordIndex++)
+        {
+            char HiddenWordChar = HiddenWord[HiddenWordIndex];
+            if (GuessChar == HiddenWordChar)
+            {
+                CowCount++;
+                break;
+            }
+        }
+
+    }
 
 }
