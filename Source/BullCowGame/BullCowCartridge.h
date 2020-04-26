@@ -31,7 +31,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual TArray<FString> GetValidWords(const TArray<FString>& WordsList) const; // is not going to change any private 
 																				   //value this is why is const, 
 																				   //we are not going to change any member variables
-	virtual void GetBullCows(const FString& Guess, FBullCowCount& BullCowCounter) const; // Is a reference, because is an out parameter
+	virtual FBullCowCount GetBullCows(const FString& Guess) const; // Is a reference, because is an out parameter
 		
 	// Your declarations go below!
 	private:

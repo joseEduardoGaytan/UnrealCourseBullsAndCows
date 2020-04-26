@@ -82,8 +82,8 @@ void UBullCowCartridge::WelcomePlayer()
     // TEXT macro to encode unreal string
     PrintLine(TEXT("Welcome to Bulls Cows Game!"));
     // Ask the user to input the guess
-    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len()); // TODO: Change it for a not hardcoded variable   
-    PrintLine(TEXT("You have %i lives!"), UserLives); // TODO: Change it for a not hardcoded variable   
+    PrintLine(TEXT("Guess the %i letter word!"), HiddenWord.Len());
+    PrintLine(TEXT("You have %i lives!"), UserLives);
     PrintLine(TEXT("Press enter to continue..."));
 }
 
@@ -135,8 +135,7 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
 
     // Show the player the Bulls and Cows
-    FBullCowCount BullCowCounter;
-    this->GetBullCows(Guess, BullCowCounter);
+    FBullCowCount BullCowCounter = this->GetBullCows(Guess);
 
     // Print the additional or lives regarding information to the user
     PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
@@ -214,8 +213,11 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
 }
 
-void UBullCowCartridge::GetBullCows(const FString& Guess, FBullCowCount& BullCowCounter) const
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& Guess) const
 {    
+
+    FBullCowCount BullCowCounter;
+
     for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
     {
         char GuessChar = Guess[GuessIndex];
@@ -236,5 +238,7 @@ void UBullCowCartridge::GetBullCows(const FString& Guess, FBullCowCount& BullCow
         }
 
     }
+
+    return BullCowCounter;
 
 }
