@@ -8,7 +8,9 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-        
+
+    FBullCowCount Count;
+
     //// Referencia
     //int32 a = 0;
     //int32 b = 5;
@@ -133,13 +135,12 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
 
     // Show the player the Bulls and Cows
-    // are not initialized this means are out parameters
-    int32 Bulls, Cows;
-    this->GetBullCows(Guess, Bulls, Cows);
+    FBullCowCount BullCowCounter;
+    this->GetBullCows(Guess, BullCowCounter);
 
     // Print the additional or lives regarding information to the user
     PrintLine(TEXT("Sorry but your guess is not correct, please try again!"));
-    PrintLine(TEXT("You have %i Bulls and %i Cows"), Bulls, Cows);
+    PrintLine(TEXT("You have %i Bulls and %i Cows"), BullCowCounter.Bulls, BullCowCounter.Cows);
     PrintLine(TEXT("You have %i lives remain!"), UserLives);
 
 }
@@ -213,18 +214,14 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
 }
 
-void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const
-{
-    // initialize out parameter, because this are not initialized outside the function
-    BullCount = 0;
-    CowCount = 0;
-
+void UBullCowCartridge::GetBullCows(const FString& Guess, FBullCowCount& BullCowCounter) const
+{    
     for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
     {
         char GuessChar = Guess[GuessIndex];
         if (GuessChar == this->HiddenWord[GuessIndex])
         {
-            BullCount++;
+            BullCowCounter.Bulls++;
             continue; // next iteration
         }
 
@@ -233,7 +230,7 @@ void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int3
             char HiddenWordChar = HiddenWord[HiddenWordIndex];
             if (GuessChar == HiddenWordChar)
             {
-                CowCount++;
+                BullCowCounter.Cows++;
                 break;
             }
         }

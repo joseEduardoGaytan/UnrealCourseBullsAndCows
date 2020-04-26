@@ -7,6 +7,11 @@
 #include "Console/Cartridge.h"
 #include "BullCowCartridge.generated.h"
 
+struct FBullCowCount
+{
+	int32 Bulls = 0;
+	int32 Cows = 0;
+};
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BULLCOWGAME_API UBullCowCartridge : public UCartridge
@@ -26,7 +31,7 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual TArray<FString> GetValidWords(const TArray<FString>& WordsList) const; // is not going to change any private 
 																				   //value this is why is const, 
 																				   //we are not going to change any member variables
-	virtual void GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const; // Is a reference, because is an out parameter
+	virtual void GetBullCows(const FString& Guess, FBullCowCount& BullCowCounter) const; // Is a reference, because is an out parameter
 		
 	// Your declarations go below!
 	private:
