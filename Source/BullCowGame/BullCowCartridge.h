@@ -19,10 +19,12 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual bool CheckWordLength(const FString HiddenWord, FString Input);
 	virtual void WelcomePlayer();
 	virtual void EndGame();
-	virtual void ProcessGuess(FString Guess);
-	virtual bool IsIsogram(FString Guess) const;
-	virtual bool IsIsogramCourseVersion(FString Guess) const;
-	virtual TArray<FString> GetValidWords(TArray<FString> WordsList) const; // is not going to change any private value this is why is const
+	virtual void ProcessGuess(const FString& Guess);
+	virtual bool IsIsogram(const FString& Guess) const;
+	virtual bool IsIsogramCourseVersion(const FString& Guess) const;
+	virtual TArray<FString> GetValidWords(const TArray<FString>& WordsList) const; // is not going to change any private 
+																				   //value this is why is const, 
+																				   //we are not going to change any member variables
 		
 	// Your declarations go below!
 	private:

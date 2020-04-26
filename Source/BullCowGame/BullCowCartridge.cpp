@@ -9,6 +9,15 @@ void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
 
+    //// Referencia
+    //int32 a = 0;
+    //int32 b = 5;
+    //int32& refa = a;
+
+    //PrintLine(TEXT("a = %i; b = %i; c = %i"), a,b,refa);
+    //refa = b; // This is going to change a because refa is a reference to a
+    //PrintLine(TEXT("a = %i; b = %i; c = %i"), a, b, refa);
+
     TArray<FString> ValidWords = GetValidWords(Words);
 
     // Seting Up Game
@@ -74,7 +83,7 @@ void UBullCowCartridge::WelcomePlayer()
     PrintLine(TEXT("Press enter to continue..."));
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {    
     // Using early returns; not needed but is part of a challenge
     // We can avoid nesting
@@ -129,7 +138,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
 
 }
 
-bool UBullCowCartridge::IsIsogram(FString Guess) const
+bool UBullCowCartridge::IsIsogram(const FString& Guess) const
 {
     // Since a set doesn't allow any repeated values
     std::unordered_set<char> Chars;
@@ -153,11 +162,8 @@ bool UBullCowCartridge::IsIsogram(FString Guess) const
     return bIsIsogram;
 }
 
-bool UBullCowCartridge::IsIsogramCourseVersion(FString Guess) const
-{
-    //int32 Index = 0;
-    //int32 Comparison = Index + 1;
-
+bool UBullCowCartridge::IsIsogramCourseVersion(const FString& Guess) const
+{    
     for (int32 Index = 0; Index < Guess.Len() - 1; Index++)
     {
         char characterTaken = Guess[Index];
@@ -174,7 +180,7 @@ bool UBullCowCartridge::IsIsogramCourseVersion(FString Guess) const
 }
 
 /// Is const because is not going to change the state of the class. Any member variables
-TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
     TArray<FString> ValidWords;
 
